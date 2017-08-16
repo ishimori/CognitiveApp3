@@ -121,27 +121,16 @@ function linkRecFile(pId, pFileKey){
     
 }
 
-// TODO まだどこにも適用してない
-function convDataURL2Blob(pDataUrl, pBlob){
-    
-    var mime_base64 = pDataUrl.split(',', 2);
-    var mime = mime_base64[0].split(';');
-    mime = mime[0].split(':');
-    mime = mime[1]? mime[1]: mime[0];
-	var base64 = window.atob(mime_base64[1]);
-	var len = base64.length;
-	var bin = new Uint8Array(len);
-	for (var i=0; i<len; i++)
-	{
-	  bin[i] = base64.charCodeAt(i);
-	}
-	pBlob = new Blob([bin], {type:mime});
-}
 // ------------------------------------
 //  添付ファイルアップロード用の前準備
 // ------------------------------------
 function getUploadSettings(){
     // カメラ画像を読込み
+    
+    // blobに変換
+    var blob = cnvDataURL2Blob($("#face_image").attr("src"));
+
+/*    
     var dataurl = $("#face_image").attr("src");
 
     //DataURLをBLOBに変換
@@ -157,6 +146,7 @@ function getUploadSettings(){
 	  bin[i] = base64.charCodeAt(i);
 	}
 	var blob = new Blob([bin], {type:mime});
+*/
 
     var formData = new FormData();
     formData.append("file", blob , "test.jpg"); 
@@ -531,9 +521,11 @@ function call_vision_api(){
     local_process($("#face_image").attr('src'), 2);
 
 }
-
-// pType : 1 emotion api
-//         2 computer vision api
+// ------------------------------------
+//   AzureAPI呼び出し
+//     pType : 1 emotion api
+//             2 computer vision api
+// ------------------------------------
 function local_process(pResult, pType){
 
     var subscriptionKey;
@@ -552,6 +544,10 @@ function local_process(pResult, pType){
         "returnFaceAttributes": "age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise",
     };
 
+    // blobに変換
+    var blob = cnvDataURL2Blob(pResult);
+
+/*
     var dataurl = pResult;
 
     //DataURLをBLOBに変換
@@ -567,6 +563,7 @@ function local_process(pResult, pType){
 	  bin[i] = base64.charCodeAt(i);
 	}
 	var blob = new Blob([bin], {type:mime});
+*/
 
     $.ajax({
         url: uriBase + "?" + $.param(params),
@@ -594,5 +591,24 @@ function local_process(pResult, pType){
     .fail(function() {
         $("#responseTextArea").val("error");
     });
+}
+// ------------------------------------
+//       DataURL を Blob型に変換
+// ------------------------------------
+function cnvDataURL2Blob(pDataUrl){
+    
+    var mime_base64 = pDataUrl.split(',', 2);
+    var mime = mime_base64[0].split(';');
+    mime = mime[0].split(':');
+    mime = mime[1]? mime[1]: mime[0];
+    var base64 = window.atob(mime_base64[1]);
+	var len = base64.length;
+	var bin = new Uint8Array(len);
+	for (var i=0; i<len; i++)
+	{
+	  bin[i] = base64.charCodeAt(i);
+	}
+	var blob = new Blob([bin], {type:mime});
+    return blob;
 }
 
