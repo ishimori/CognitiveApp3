@@ -5,6 +5,10 @@ var g_address="現在地取得出来ませんでした。";
 var g_smile;
 var g_age;
 
+// ------------------------------------
+//   大きボタンの表示切り替え
+// parmaeter:camera, azure, kintone
+// ------------------------------------
 function switch_btn(pType){
  
     switch (pType){
@@ -106,7 +110,6 @@ function linkRecFile(pId, pFileKey){
         "data":body
     }).done(function(data) {
         alert('レコード登録しました。');
-        console.log('link success');
         console.log(data);
         
         // カメラボタンを表示
@@ -118,6 +121,22 @@ function linkRecFile(pId, pFileKey){
     
 }
 
+// TODO まだどこにも適用してない
+function convDataURL2Blob(pDataUrl, pBlob){
+    
+    var mime_base64 = pDataUrl.split(',', 2);
+    var mime = mime_base64[0].split(';');
+    mime = mime[0].split(':');
+    mime = mime[1]? mime[1]: mime[0];
+	var base64 = window.atob(mime_base64[1]);
+	var len = base64.length;
+	var bin = new Uint8Array(len);
+	for (var i=0; i<len; i++)
+	{
+	  bin[i] = base64.charCodeAt(i);
+	}
+	pBlob = new Blob([bin], {type:mime});
+}
 // ------------------------------------
 //  添付ファイルアップロード用の前準備
 // ------------------------------------
@@ -157,123 +176,30 @@ function getUploadSettings(){
     return settings;
 }
 
-// -----------------------------------------------------------------------------
+// ------------------------------------
+//      ComputerVision結果
+// ------------------------------------
+function showResultVis(pData){
+    // li 要素クリア    
+    $("#face_result").empty();
 
-function test_upload(){
-    test_upload_2($("#face_image").attr("src"));
- 
-}
-function test_upload_2(pResult){
+    var captions = pData["description"]["captions"];
+
+
+    var tr = "<tr><td width='50%'><ul id='face_result'></ul></td>";
+    tr = tr + "</tr>"
+    $(tr).appendTo($("#face_result_table"));
+
+    $("#face_result").append("<li>" + captions[0].text + "</li>");
     
-    var dataurl = pResult;
+    // 翻訳テキストをセット
+    //setTranslatedText(captions[0].text);
+    $("#face_result").append("<li>" + "信頼度 =" + captions[0].confidence + "</li>");
 
-    //DataURLをBLOBに変換
-    var mime_base64 = dataurl.split(',', 2);
-	var mime = mime_base64[0].split(';');
-	mime = mime[0].split(':');
-	mime = mime[1]? mime[1]: mime[0];
-	var base64 = window.atob(mime_base64[1]);
-	var len = base64.length;
-	var bin = new Uint8Array(len);
-	for (var i=0; i<len; i++)
-	{
-	  bin[i] = base64.charCodeAt(i);
-	}
-	var blob = new Blob([bin], {type:mime});
-
-    var formData = new FormData();
-    formData.append("file", blob , "test.jpg"); 
-    
-    var settings = {
-      "url": "https://1cx5k.cybozu.com/k/v1/file.json",
-      "method": "POST",
-      "headers": {
-        "x-cybozu-api-token": "am2FnNx5Mt6zfhJqdCQ1KI4PT9EfzSvZoZlaXN1S",
-      },
-      "processData": false,
-      "contentType": false,
-      "mimeType": "multipart/form-data",
-      "data": formData
-    }
-    
-    $.ajax(settings).done(function(data) {
-        var key = JSON.parse(data).fileKey;
-        alert(key);
-    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-        alert('fail');
-        alert(XMLHttpRequest.status);
-        alert(textStatus);
-        alert(errorThrown);
-    });
-}
-
-function test_new_record(){
-    var body = JSON.stringify({
-      "app": 49,
-      "record": {
-        "register_person": {
-          "value": "アンパンマン2"
-        }
-      }
-    });
-
-    $.ajax({
-        "url": "https://1cx5k.cybozu.com/k/v1/record.json",
-        "method": "POST",
-        "headers": {
-            "Content-Type"  : "application/json",
-            "x-cybozu-api-token": "am2FnNx5Mt6zfhJqdCQ1KI4PT9EfzSvZoZlaXN1S"
-        },
-        "data":body
-    }).done(function(data) {
-        //alert('success');
-        alert("id="+data["id"]+" revision="+data["revision"]);
-    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-
-        alert(XMLHttpRequest.status);
-        alert(textStatus);
-        alert(errorThrown);
-    });
+    // カメラボタン表示
+    switch_btn('camera');
 
 }
-function test_search(){
-
-    // API トークン
-    // Dj8UFFX5XQhurLCAXUi7JegAkkwZRJQmhxSt3P0g
-    // 呼び方
-    // curl -H "X-Cybozu-API-Token: YOUR_TOKEN" "https://1cx5k.cybozu.com/k/v1/record.json?app=49&id=1"
-
-    $.ajax({
-        //url: "https://1cx5k.cybozu.com/k/v1/records.json?app=49&id=1",
-        url: "https://1cx5k.cybozu.com/k/v1/records.json",
-        method: 'GET',
-        headers: {
-            //'Content-Type'  : "application/json",
-            "X-Cybozu-API-Token":"Dj8UFFX5XQhurLCAXUi7JegAkkwZRJQmhxSt3P0g"
-        },
-        data:{
-            "app":49,
-            "query":"$id=1"
-        }
-    }).done(function(data) {
-        //alert('success');
-        for(var i=0;i<data.records.length;i++){
-            //alert(data.records[i]);
-            var wData = data.records[i];
-            alert(wData["register_person"]["value"] + wData["スマイル"]["value"]);
-        }
-    
-    }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
-
-        alert(XMLHttpRequest.status);
-        alert(textStatus);
-        alert(errorThrown);
-
-    });
-
-}
-
-
 // ------------------------------------
 //      AzureFaceAPI結果を表示
 // ------------------------------------
@@ -339,7 +265,15 @@ function showResult(pData){
         context.stroke();
 
         context.fillStyle="rgb(0, 0, 255)"; // 青
-        context.fillRect(rect.left-30, rect.top+rect.height+10, 120, 30  );
+        //context.fillRect(rect.left-30, rect.top+rect.height+10, 120, 30  );
+        context.fillRect(rect.left-30, rect.top+rect.height+10, 200, 30  );
+
+        // 吹き出し内容
+        var wText = "女";
+        if (fa.gender == "male"){
+            wText = "男"
+        }
+        wText = wText + "(" + fa.age+") - "+g_smile + "点";
 
 
         // 顔に吹き出しを出力
@@ -347,7 +281,8 @@ function showResult(pData){
         context.font = "24px 'ＭＳ ゴシック'";
         context.textAlign = "left";
         context.textBaseline = "top";
-        context.fillText(" " + fa.gender + " " + fa.age, rect.left-30, rect.top + rect.height + 10, 200);
+        //context.fillText(" " + fa.gender + " " + fa.age, rect.left-30, rect.top + rect.height + 10, 200);
+        context.fillText(" " + wText, rect.left-30, rect.top + rect.height + 10, 200);
 
 //        context.stroke();
         //context.rect(rect.left-30, rect.top + rect.height + 10, 100, 20)
@@ -512,6 +447,9 @@ function compress_photo(pReaderResult){
     }
 }
 
+// ------------------------------------
+//   GPSから現在位置を取得し、グローバル変数にセット
+// ------------------------------------
 function setLocation(){
 // GPS callback ----------------------
     //位置情報取得に成功した場合のコールバック
@@ -540,6 +478,9 @@ function setLocation(){
     
 }
 
+// ------------------------------------
+//   緯度経度から住所を取得
+// ------------------------------------
 function setGeoCodeAddress(pLat,pLon){
     geocoder = new google.maps.Geocoder();
     //var latlng = new google.maps.LatLng(gpsLat,gpsLng);
@@ -547,9 +488,18 @@ function setGeoCodeAddress(pLat,pLon){
  
 	geocoder.geocode({'latLng':latlng},function(results,status){
 		if (status == google.maps.GeocoderStatus.OK) {
-			console.log(results[1].formatted_address);
-            g_address=results[1].formatted_address;
-            console.log(g_address);
+			
+            //console.log(JSON.stringify(results));
+            
+            //g_address=results[1].formatted_address;
+            g_address=results[4].formatted_address;
+            //console.log(g_address);
+            console.log(results[1].formatted_address);
+            console.log(results[2].formatted_address);
+            console.log(results[3].formatted_address);
+            console.log(results[4].formatted_address);
+            console.log(results[5].formatted_address);
+            console.log(results[6].formatted_address);
 /*            
 			result 	= '現在地の取得に成功<br>';
 			result += '経度：' + gpsLat + '<br>';
@@ -566,18 +516,35 @@ function setGeoCodeAddress(pLat,pLon){
 }
 
 // ------------------------------------
-//   読込済み画像で顔認証API呼び出し
+//   EmotionAPI呼び出し
 // ------------------------------------
 function call_face_api(){
 
-    local_process($("#face_image").attr('src'));
+    local_process($("#face_image").attr('src'), 1);
 
 }
-function local_process(pResult){
+// ------------------------------------
+//   ComputerVisionAPI呼び出し
+// ------------------------------------
+function call_vision_api(){
+    
+    local_process($("#face_image").attr('src'), 2);
 
-    var subscriptionKey = getter("ssKey");
-    var uriBase = getter("uriBase");
+}
 
+// pType : 1 emotion api
+//         2 computer vision api
+function local_process(pResult, pType){
+
+    var subscriptionKey;
+    var uriBase;
+    if (pType==1){
+        subscriptionKey = getter("ssKey");
+        uriBase = getter("uriBase");
+    }else{
+        subscriptionKey = getter("ssKeyVis");
+        uriBase = getter("uriBaseVis");
+    }
     // Request parameters.
     var params = {
         "returnFaceId": "true",
@@ -614,9 +581,15 @@ function local_process(pResult){
       data:blob
     })
     .done(function(data) {
+        
         $("#responseTextArea").val(JSON.stringify(data, null, 2));
-        // 結果表示
-        showResult(data);
+        if (pType==1){
+            // 結果表示Emotion
+            showResult(data);
+        }else{
+            // 結果表示Computer Vision
+            showResultVis(data);
+        }
     })
     .fail(function() {
         $("#responseTextArea").val("error");

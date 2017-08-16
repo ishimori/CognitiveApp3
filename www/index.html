@@ -12,6 +12,10 @@
     <script src="js/camera.js"></script>
     <script src="js/score.js"></script>
     <script src="js/setting.js"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDpJN8WKdstogKPPX0WDqZi5-4A3A3tuoI"
+            type="text/javascript"
+            charset="UTF-8">
+    </script>
 
   <link rel="stylesheet" href="components/loader.css">
   <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
@@ -21,6 +25,10 @@
   <script>
     ons.ready(function() {
       console.log("Onsen UI is ready!");
+      
+      // 現在位置を取得
+      setLocation();
+      
     });
 
     document.addEventListener('show', function(event) {

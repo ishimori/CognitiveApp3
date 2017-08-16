@@ -15,6 +15,12 @@ function getter(pKey){
         case "uriBase":
             return "https://southeastasia.api.cognitive.microsoft.com/face/v1.0/detect";
             break;
+        case "ssKeyVis":
+            return "c7e8b9725017481292d55d2d0207f85c";
+            break;
+        case "uriBaseVis":
+            return "https://southeastasia.api.cognitive.microsoft.com/vision/v1.0/describe";
+            break;
         case "kintoneToken":
             return "am2FnNx5Mt6zfhJqdCQ1KI4PT9EfzSvZoZlaXN1S";
             break;
