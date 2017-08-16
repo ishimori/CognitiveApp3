@@ -23,17 +23,69 @@
   <link rel="stylesheet" href="css/style.css">
 
   <script>
+    var gf_score=false;
     ons.ready(function() {
       console.log("Onsen UI is ready!");
       
-      // 現在位置を取得
-      setLocation();
-      
+        // 現在位置を取得
+        setLocation();
+/*        
+        // pushイベント
+        nav.on("postpush",function(event){
+        
+            switch (event.enterPage.name){
+                case "score_detail.html":
+                    // 詳細ページ表示
+                    showScoreDetail(event.enterPage.options.id
+                                    ,event.enterPage.options.title
+                                    ,event.enterPage.options.filekey);
+                    break;
+                default:
+                    console.log(event.enterPage.name);
+                    break;
+                }
+        });
+*/      
     });
-
+    document.addEventListener('postpush', function(event) {
+      var page = event.target;
+      console.log("postpush:" + page.id);
+      
+        //alert(event.enterPage.name);
+        //console.log(event);
+        //console.log(event.enterPage);
+        //console.log(event.enterPage.toString());
+        //console.log(JSON.stringify(event));
+        /*
+      var page = event.target;
+      if (page.matches("#index")){
+          console.log('index');
+      } else if (page.matches('#score_detail')){
+          console.log('score_detail');
+      } else if (page.matches('#setting')){
+          console.log('setting');
+      } else if (page.matches('#map')){
+          console.log('map');
+      } else{
+          console.log('上記以外');
+          console.log(page);
+      }
+        */
+    });
+    
     document.addEventListener('show', function(event) {
       var page = event.target;
       
+      console.log("show:"+page.id);
+      if (page.id == "score"){
+          // 初回は画面遷移でスコア表示
+          if (gf_score == false){
+              showScore();
+              gf_score= true;
+          }
+      }
+      
+/*      
       if (page.matches("#index")){
           console.log('index');
       } else if (page.matches('#camera')){
@@ -42,15 +94,23 @@
           console.log('score');
       } else if (page.matches('#map')){
           console.log('map');
+      } else{
+          console.log('show other');
+          console.log(page.id);
       }
-      
+  */    
     });
     
 </script>
 </head>
 <body>
+
+        <ons-navigator id="nav" var="nav" page="tab.html"></ons-navigator>
+<!--
     <ons-page id="index">
         <ons-navigator id="nav" var="nav" page="tab.html"></ons-navigator>
     </ons-page>ons-page>
+-->
+    
 </body>
 </html>
