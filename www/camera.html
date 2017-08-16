@@ -1,6 +1,44 @@
 <ons-page id="camera"> 
     <ons-toolbar> 
-        <div class="center">camera</div> 
+        <div class="center">Azure Emotion/ComputerVision</div> 
     </ons-toolbar>
-    camera
+    <p style="text-align: center;">
+        <!-- FaceAPIの結果表示用-->
+        <table border="0px" width="100%" id="face_result_table"></table>
+        <!-- <ul id="face_result"></ul> -->
+
+        <!-- 解像度圧縮後の画像を表示 -->
+        <img id="face_image" hidden="true"/>
+        
+        <!-- canvasは解像度圧縮に使うのみ。Azureにパスするのは img -->
+        <canvas id="canvas"></canvas>
+        
+        <ons-button id="btn_camera" modifier="large" onclick="camera_read()" style="background-color:red;">カメラ起動</ons-button>
+        <ons-button id="btn_emotion" modifier="large" style="display:none;background-color:green" onclick="call_face_api()" >Emotion</ons-button>
+        <ons-button id="btn_vision" modifier="large" style="display:none;background-color:Chartreuse" onclick="call_vision_api()" >ComputerVision</ons-button>
+        <ons-button id="btn_kintone" modifier="large" style="display:none"  onclick="kintone_entry()" >kintone登録</ons-button>
+        <HR>
+        <table>
+        <tr width='100%'>
+            <td>
+                <ons-button onclick="camera_read()" style="background-color:red;">カメラ起動</ons-button>
+            </td>
+            <td align="center">
+                <ons-button onclick="call_face_api();"style="background-color:green;">Emotion</ons-button>
+                <ons-button onclick="call_vision_api();"style="background-color:Chartreuse;">ComputerVis</ons-button>
+            </td>
+            <td>
+                <ons-button onclick="kintone_entry()">kintone登録</ons-button>
+            </td>
+        </tr>
+        </table>
+<HR>
+        結果表示用エリア<BR>
+        <textarea id="responseTextArea" style="width:100%; height:300px;"></textarea>
+        <BR>
+
+        </p>
+    
+    
+    
 </ons-page>

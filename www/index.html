@@ -7,17 +7,11 @@
   <script src="components/loader.js"></script>
   <script src="lib/onsenui/js/onsenui.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
     <!-- タブ毎にJavascript分ける -->
-    <script src="js/tab1.js"></script>
-    <script src="js/tab2.js"></script>
-    <script src="js/tab3.js"></script>
-
-    <!-- fireworks関連 -->
-    <link rel="stylesheet" type="text/css" href="style/fireworks.css" media="screen" />
-    <script type="text/javascript" src="script/soundmanager2-nodebug-jsmin.js"></script>
-    <script type="text/javascript" src="script/fireworks.js"></script>
-    
-
+    <script src="js/camera.js"></script>
+    <script src="js/score.js"></script>
+    <script src="js/setting.js"></script>
 
   <link rel="stylesheet" href="components/loader.css">
   <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
@@ -31,39 +25,24 @@
 
     document.addEventListener('show', function(event) {
       var page = event.target;
-      var titleElement = document.querySelector('#toolbar-title');
-      //console.log(JSON.stringify(page));
-      //console.log(JSON.stringify(event.target));
+      
       if (page.matches("#index")){
-          
           console.log('index');
-          //titleElement.innerHTML = 'index';
       } else if (page.matches('#camera')){
           console.log('camera');
-          //titleElement.innerHTML = 'CognitiveApp3 カメラ';
-          
+      } else if (page.matches('#score')){
+          console.log('score');
+      } else if (page.matches('#map')){
+          console.log('map');
       }
       
-/*
-      if (page.matches('#tCamera')) {
-        titleElement.innerHTML = 'CognitiveApp3 カメラ';
-      } else if (page.matches('#tab2')) {
-        titleElement.innerHTML = 'CognitiveApp 顔認識';
-      } else if (page.matches('#tab3')) {
-        titleElement.innerHTML = 'CognitiveApp 画像解析';
-      } else if (page.matches('#tab9')) {
-        titleElement.innerHTML = 'CognitiveApp 設定';
-      }
-*/
     });
     
 </script>
 </head>
 <body>
-
-  <ons-page id="index">
-    <ons-navigator id="nav" var="nav" page="tab.html"></ons-navigator>
-  </ons-page>ons-page>
-  
+    <ons-page id="index">
+        <ons-navigator id="nav" var="nav" page="tab.html"></ons-navigator>
+    </ons-page>ons-page>
 </body>
 </html>
