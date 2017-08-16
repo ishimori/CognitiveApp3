@@ -34,8 +34,8 @@
 
       var titleElement = document.querySelector('#toolbar-title');
 
-      if (page.matches('#tab1')) {
-        titleElement.innerHTML = 'CognitiveApp 音声認識';
+      if (page.matches('#tCamera')) {
+        titleElement.innerHTML = 'CognitiveApp3 カメラ';
       } else if (page.matches('#tab2')) {
         titleElement.innerHTML = 'CognitiveApp 顔認識';
       } else if (page.matches('#tab3')) {
@@ -49,29 +49,138 @@
 </script>
 </head>
 <body>
+
+  <ons-page>
+<ons-navigator id="myNavigator" var="myNavigator" page="tab.html"></ons-navigator>
+  </ons-page>ons-page>
+
+<!--
   <ons-page>
     <ons-toolbar>
       <div class="center" id="toolbar-title"></div>
     </ons-toolbar>
-    <ons-tabbar position="auto">
-        <ons-tab page="tab1.html" active>
-            <ons-icon icon="ion-mic-a"></ons-icon>
-            <span style="font-size: 14px">音声認識</span>      
+    <ons-tabbar position="bottom">
+        <ons-tab page="camera.html" active>
+            <ons-icon icon="ion-camera"></ons-icon>
+            <span style="font-size: 16px">カメラ</span>      
         </ons-tab>
-        <ons-tab page="tab2.html">
-            <ons-icon icon="ion-happy-outline"></ons-icon>
-            <span style="font-size: 14px">顔認識</span>      
+        <ons-tab page="score.html" >
+            <ons-icon icon="ion-stats-bars"></ons-icon>
+            <span style="font-size: 16px">スコア</span>      
         </ons-tab>
-        <ons-tab page="tab3.html" active>
-            <ons-icon icon="ion-chatbox-working"></ons-icon>
-            <span style="font-size: 14px">画像解析</span>      
+        <ons-tab page="map.html" >
+            <ons-icon icon="ion-location"></ons-icon>
+            <span style="font-size: 16px">地図</span>      
         </ons-tab>
-        <ons-tab page="tab9.html">
+        <ons-tab page="nagivator.html" >
             <ons-icon icon="ion-gear-a"></ons-icon>
-            <span style="font-size: 14px">設定</span>      
+            <span style="font-size: 16px">その他</span>      
         </ons-tab>
         </ons-tabbar>
   </ons-page>
+-->  
+  <!---------------  カメラタブ start ----------------->
+  <ons-template id="camera.html">
+  
+    <ons-page id="tCamera">
+    <p style="text-align: center;">
+        Azure 顔認識
+        <ul id="face_result"></ul>
+        
+        <!-- 解像度圧縮後の画像を表示 -->
+        <img id="face_image" hidden="true"/>
+        
+        <!-- canvasは解像度圧縮に使うのみ。Azureにパスするのは img -->
+        <canvas id="canvas"></canvas>
+        
+        <ons-button id="capture" modifier="large" onclick="call_face_api()">年齢認証！</ons-button>
+        <HR>
+
+
+        <HR>
+        
+        結果表示用エリア<BR>
+        <textarea id="responseTextArea" style="width:280px; height:300px;"></textarea>
+        <BR>
+
+        </p>
+    </ons-page>
+  </ons-template>
+  <!--------------- カメラタブ end ----------------->  
+  
+  <!---------------  スコアタブ start ----------------->
+  <ons-template id="score.html">
+    <ons-page id="tScore">
+    <p style="text-align: center;">
+        スコア
+        
+    </p>
+    </ons-page>
+  </ons-template>
+  <!--------------- スコアタブ end ----------------->  
+  <!---------------  地図タブ start ----------------->
+  <ons-template id="map.html">
+    <ons-page id="tMap">
+    <p style="text-align: center;">
+        地図
+        
+    </p>
+    </ons-page>
+  </ons-template>
+  <!--------------- 地図タブ end ----------------->  
+  <!---------------  その他タブ start ----------------->
+  <ons-template id="other.html">
+    <ons-page id="tOther">
+        <ons-navigator var="nav" page="other2.html">
+        </ons-navigator> 
+    </ons-page>
+  
+<!--  
+    <ons-page id="tOther">
+    <p style="text-align: center;">
+        その他
+        <ons-button id="btn_capture_android" modifier="large" onclick="navigator.pushPage('setting.html');">アプリ設定</ons-button>
+
+    </p>
+    </ons-page>
+-->    
+  </ons-template>
+  <!--------------- その他タブ end ----------------->  
+  <!---------------  その他タブ start ----------------->
+  <ons-template id="other2.html">
+    <ons-page id="tOther2">
+    <p style="text-align: center;">
+        その他2
+        <ons-button id="btn_capture_android" modifier="large" onclick="nav.pushPage('setting.html');">アプリ設定</ons-button>
+
+    </p>
+    </ons-page>
+  </ons-template>
+  <!--------------- その他タブ end ----------------->  
+  
+  <!---------------  設定 start ----------------->
+  <ons-template id="setting.html">
+    <ons-page id="tSetting">
+    <p style="text-align: center;">
+        設定
+        <ons-button id="btn_capture_android" modifier="large" onclick="navigator.popPage();">戻る</ons-button>
+        
+    </p>
+    </ons-page>
+  </ons-template>
+  <!--------------- 設定タブ end ----------------->  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+<!----------------------- ここから下はいずれ削除 ---------------------------->
+  
   <!--------------- tab1 音声認識 start ----------------->
   <ons-template id="tab1.html">
     <ons-page id="tab1">

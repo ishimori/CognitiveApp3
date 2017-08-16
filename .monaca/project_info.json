@@ -12,6 +12,7 @@
         "cordova-custom-config@2.0.3",
         "cordova-plugin-camera@2.4.1",
         "cordova-plugin-media-capture@1.4.3",
-        "cordova-plugin-file-transfer@1.6.3"
+        "cordova-plugin-file-transfer@1.6.3",
+        "cordova-plugin-geolocation@2.4.3"
     ]
 }
