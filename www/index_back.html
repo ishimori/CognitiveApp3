@@ -24,29 +24,52 @@
 
   <script>
     var gf_score=false;
-    //ons.bootstrap();
     ons.ready(function() {
       console.log("Onsen UI is ready!");
       
         // 現在位置を取得
         //setLocation();
-        var myNavigator = document.querySelector('ons-navigator');
-        myNavigator.addEventListener('postpush', function(event) {
-          console.log("pushPage処理が終わりました！", event);
-          console.log(event.enterPage.data.id);
-          
-        });
-        myNavigator.addEventListener('prepush', function(event) {
-          //console.log("prepush処理が終わりました！", event);
-          //console.log(event.currentPage);
-        });
+        
 
+        
+    });
+    
+        nav.on('postpush', function(e) {
+            alert('navigator postpush');
+            //$(e.enterPage.element).find("#my-content").html('<p><div class="center" style="text-align:center">コンテンツ書き換え</div></p>');
+        });
+    
+    document.addEventListener('postpush', function(event) {
+      var page = event.target;
+      console.log("postpush:" + page.id);
+      console.log("postpush:" + page.enterPage);
+      
+        //alert(event.enterPage.name);
+        //console.log(event);
+        //console.log(event.enterPage);
+        //console.log(event.enterPage.toString());
+        //console.log(JSON.stringify(event));
+        /*
+      var page = event.target;
+      if (page.matches("#index")){
+          console.log('index');
+      } else if (page.matches('#score_detail')){
+          console.log('score_detail');
+      } else if (page.matches('#setting')){
+          console.log('setting');
+      } else if (page.matches('#map')){
+          console.log('map');
+      } else{
+          console.log('上記以外');
+          console.log(page);
+      }
+        */
     });
     
     document.addEventListener('show', function(event) {
         var page = event.target;
         
-        //console.log("show:"+page.id);
+        console.log("show:"+page.id);
         if (page.id == "score"){
             // 初回は画面遷移でスコア表示
             if (gf_score == false){
@@ -54,8 +77,17 @@
                 gf_score= true; // スコア表示済みフラグON   
             }
         }
+        /*
+        }else if(page.id=="score_detail"){
+            alert(event.enterPage.options.id);
+            // 詳細ページ表示
+            showScoreDetail(event.enterPage.options.id
+            ,event.enterPage.options.title
+            ,event.enterPage.options.filekey);
+        }
+        */
     });
-
+    
 </script>
 </head>
 <body>

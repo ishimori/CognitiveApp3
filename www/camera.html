@@ -16,19 +16,19 @@
         <ons-button id="btn_camera" modifier="large" onclick="camera_read()" style="background-color:red;">カメラ起動</ons-button>
         <ons-button id="btn_emotion" modifier="large" style="display:none;background-color:green" onclick="call_face_api()" >Emotion</ons-button>
         <ons-button id="btn_vision" modifier="large" style="display:none;background-color:Chartreuse" onclick="call_vision_api()" >ComputerVision</ons-button>
-        <ons-button id="btn_kintone" modifier="large" style="display:none"  onclick="kintone_entry()" >kintone登録</ons-button>
+        <ons-button id="btn_kintone" modifier="large" style="display:none;background-color:Violet"  onclick="kintone_entry()" >kintone登録</ons-button>
         <HR>
         <table>
         <tr width='100%'>
             <td>
-                <ons-button onclick="camera_read()" style="background-color:red;">カメラ起動</ons-button>
+                <ons-button id="btn_camera2" onclick="camera_read()" style="background-color:red;">カメラ起動</ons-button>
             </td>
             <td align="center">
-                <ons-button onclick="call_face_api();"style="background-color:green;">Emotion</ons-button>
-                <ons-button onclick="call_vision_api();"style="background-color:Chartreuse;">ComputerVis</ons-button>
+                <ons-button id="btn_emotion2" onclick="call_face_api();"style="background-color:green;" disabled=true>Emotion</ons-button>
+                <ons-button id="btn_vision2" onclick="call_vision_api();"style="background-color:Chartreuse;" disabled=true>ComputerVis</ons-button>
             </td>
             <td>
-                <ons-button onclick="kintone_entry()">kintone登録</ons-button>
+                <ons-button id="btn_kintone2" onclick="kintone_entry()"style="background-color:Violet;" disabled=true>kintone登録</ons-button>
             </td>
         </tr>
         </table>

@@ -59,6 +59,7 @@ function showKintoneResult(pRec){
         
         // パラメータを増やす時はindex.html のscriptを修正
         var wOpt = "{id:"+wRec['$id']['value']+",title:'"+wRec['スマホ一覧タイトル']['value']+"',filekey:'" + wFileKey + "'}";
+        
         col2.setAttribute("onclick","nav.pushPage('score_detail.html',"+ wOpt +");");
         
         
@@ -75,7 +76,8 @@ function showKintoneResult(pRec){
 
 function showScoreDetail(pId,pTitle,pFileKey){
     
-    console.log(pFileKey);
+    console.log("filekey:"+pFileKey);
+    console.log("title:"+pTitle);
     //alert(pId);
     $("#score_detail").append("<li>" + pTitle + "</li>");
     $("#score_detail").append("<li>" + "id =" + pId + "</li>");

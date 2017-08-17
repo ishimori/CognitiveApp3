@@ -18,6 +18,11 @@ function switch_btn(pType){
             $("#btn_emotion").hide();
             $("#btn_vision").hide();
             $("#btn_kintone").hide();
+            // 小ボタン
+            $("#btn_camera2").prop('disabled',false);
+            $("#btn_emotion2").prop('disabled',true);
+            $("#btn_vision2").prop('disabled',true);
+            $("#btn_kintone2").prop('disabled',true);
             break;
         // Azure
         case 'azure':
@@ -25,13 +30,24 @@ function switch_btn(pType){
             $("#btn_emotion").show();
             $("#btn_vision").show();
             $("#btn_kintone").hide();
+            // 小ボタン
+            $("#btn_camera2").prop('disabled',false);
+            $("#btn_emotion2").prop('disabled',false);
+            $("#btn_vision2").prop('disabled',false);
+            $("#btn_kintone2").prop('disabled',true);
             break;
+                        
         // kintone
         case 'kintone':
             $("#btn_camera").hide();
             $("#btn_emotion").hide();
             $("#btn_vision").hide();
             $("#btn_kintone").show();
+            // 小ボタン
+            $("#btn_camera2").prop('disabled',false);
+            $("#btn_emotion2").prop('disabled',true);
+            $("#btn_vision2").prop('disabled',true);
+            $("#btn_kintone2").prop('disabled',false);
             break;
             
     }
@@ -114,6 +130,8 @@ function linkRecFile(pId, pFileKey){
         
         // カメラボタンを表示
         switch_btn('camera');
+        
+        gf_score= false; // スコア表示済みフラグOFF
         
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
         alert(XMLHttpRequest.status + " " + textStatus + " " + errorThrown);
