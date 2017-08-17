@@ -1,4 +1,22 @@
 
+var gparam_id;
+var gparam_title;
+var gparam_filekey;
+
+function nav_pushPage(pOption){
+    
+    //console.log(pOption.id);    
+    //console.log(JSON.stringify(pOption));
+    
+    // postpushでoptionsの値が取れない　（ONSENUI1と2の違いっぽい）
+    gparam_id = pOption.id;
+    gparam_title = pOption.title;
+    gparam_filekey = pOption.filekey;
+    
+    var myNavigator = document.querySelector('ons-navigator');
+    myNavigator.pushPage('score_detail.html',pOption);
+    
+}
 
 function showScore(){
 
@@ -21,9 +39,9 @@ function showScore(){
     
     }).fail(function(XMLHttpRequest, textStatus, errorThrown) {
 
-        alert(XMLHttpRequest.status);
-        alert(textStatus);
-        alert(errorThrown);
+        alert(XMLHttpRequest.status & textStatus & errorThrown);
+        //alert(textStatus);
+        //alert(errorThrown);
 
     });
 
@@ -48,11 +66,14 @@ function showKintoneResult(pRec){
         var col2 = document.createElement('ons-col');
         var img = document.createElement('img');
     
-        img.setAttribute('src','http://date.ict.miyagi.jp/wp-content/uploads/2017/03/02yuzuru_ishimori_main.jpg');
+        //img.setAttribute('src','http://date.ict.miyagi.jp/wp-content/uploads/2017/03/02yuzuru_ishimori_main.jpg');
         img.setAttribute("width","60px");
+        img.setAttribute("id",wFileKey);    // IDをキーに非同期で画像を貼り付ける
         col1.setAttribute('width','70px');
         col1.appendChild(img);
         
+        // 画像を取得
+        showImage4List(wFileKey);
         
         
         col2.innerHTML = wRec["スマホ一覧タイトル"]["value"] + " [id=" + wRec["$id"]["value"] +"]" ;
@@ -60,7 +81,8 @@ function showKintoneResult(pRec){
         // パラメータを増やす時はindex.html のscriptを修正
         var wOpt = "{id:"+wRec['$id']['value']+",title:'"+wRec['スマホ一覧タイトル']['value']+"',filekey:'" + wFileKey + "'}";
         
-        col2.setAttribute("onclick","nav.pushPage('score_detail.html',"+ wOpt +");");
+        col2.setAttribute("onclick","nav_pushPage("+ wOpt +");");
+        //col2.setAttribute("onclick","nav.pushPage('score_detail.html',"+ wOpt +");");
         
         
         row.appendChild(col1);
@@ -69,50 +91,63 @@ function showKintoneResult(pRec){
         fd.appendChild(row);
     }    
     list.appendChild(fd);
-    // ons.compile(list);
-    
 }
 
+function showImage4List(pFileKey){
+    var data = null;
+    var xhr = new XMLHttpRequest();
+
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+		var blob = new Blob([xhr.response],{type:"image/jpg"});
+		var url = window.URL || window.webkitURL;
+		var blobUrl = url.createObjectURL(blob);
+
+        var img = document.getElementById(pFileKey);
+		img.src = blobUrl;
+
+//		var score = document.getElementById('score_detail2');
+//		score.appendChild(img1);
+	  }
+	});
+
+    xhr.open("GET", "https://"+getter('kintoneSubdomain')+".cybozu.com/k/v1/file.json?fileKey="+pFileKey);
+	xhr.setRequestHeader("x-cybozu-api-token", getter('kintoneToken'));
+    xhr.setRequestHeader('X-Requested-With' , 'XMLHttpRequest');
+    xhr.responseType = 'blob';
+
+	xhr.send(data);
+}
 
 function showScoreDetail(pId,pTitle,pFileKey){
     
-    console.log("filekey:"+pFileKey);
-    console.log("title:"+pTitle);
-    //alert(pId);
-    $("#score_detail").append("<li>" + pTitle + "</li>");
-    $("#score_detail").append("<li>" + "id =" + pId + "</li>");
-    $("#score_detail").append("<li>" + "filekey =" + pFileKey + "</li>");
-    //$("#score_detail").append("<li>" + "<img width='300px' src='http://date.ict.miyagi.jp/wp-content/uploads/2017/03/02yuzuru_ishimori_main.jpg' />" + "</li>");
-
+    $("#score_detail2").append("<li>" + pTitle + "</li>");
+    $("#score_detail2").append("<li>" + "id =" + pId + "</li>");
+    //$("#score_detail2").append("<li>" + "filekey =" + pFileKey + "</li>");
 
     var data = null;
-    
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
-            // console.log(this.responseText);
-            var blob = new Blob([xhr.response],{type: 'image/jpeg'});
-            console.log(blob.toString());
-            var url = window.URL || window.webkitURL;
-            var blobUrl = url.createObjectURL(blob);
-            
-            
-            var img = document.createElement("img")  ;
-            img.src = blobUrl;
-            
-            $("#score_detail").append(img);
-      }
-    });
-    
-    xhr.open("GET", "https://1cx5k.cybozu.com/k/v1/file.json?fileKey=20170814021734367201BA6973428F81C9E6666ACA9694064");
-    xhr.setRequestHeader("x-cybozu-api-token", "am2FnNx5Mt6zfhJqdCQ1KI4PT9EfzSvZoZlaXN1S");
-    xhr.setRequestHeader("responsetype", "blob");
-    
-    xhr.send(data);
+	var xhr = new XMLHttpRequest();
 
+	xhr.addEventListener("readystatechange", function () {
+	  if (this.readyState === 4) {
+		var blob = new Blob([xhr.response],{type:"image/jpg"});
+		var url = window.URL || window.webkitURL;
+		var blobUrl = url.createObjectURL(blob);
 
+		var img1 = document.createElement('img');
+		img1.src = blobUrl;
+
+		var score = document.getElementById('score_detail2');
+		score.appendChild(img1);
+	  }
+	});
+
+    xhr.open("GET", "https://"+getter('kintoneSubdomain')+".cybozu.com/k/v1/file.json?fileKey="+pFileKey);
+	xhr.setRequestHeader("x-cybozu-api-token", getter('kintoneToken'));
+    xhr.setRequestHeader('X-Requested-With' , 'XMLHttpRequest');
+    xhr.responseType = 'blob';
+
+	xhr.send(data);
 }
 
 function showScoreDetail2(pId,pTitle,pFileKey){

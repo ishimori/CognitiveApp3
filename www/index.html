@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!--
   <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  -->
   <script src="components/loader.js"></script>
   <script src="lib/onsenui/js/onsenui.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -32,12 +34,32 @@
         //setLocation();
         var myNavigator = document.querySelector('ons-navigator');
         myNavigator.addEventListener('postpush', function(event) {
+            
           console.log("pushPage処理が終わりました！", event);
-          console.log(event.enterPage.data.id);
           
+          //console.log(event.enterPage.innerHTML);
+          console.log(event.enterPage.id);
+          console.log(gparam_id);
+          if (event.enterPage.id == "score_detail"){
+              
+            // 詳細ページ表示
+            showScoreDetail(gparam_id
+                            ,gparam_title
+                            ,gparam_filekey);          
+                            
+            /*
+            // 詳細ページ表示
+            showScoreDetail(event.enterPage.options.id
+            ,event.enterPage.options.title
+            ,event.enterPage.options.filekey);          
+            */
+          }
+            //alert(event.enterPage.options);
         });
         myNavigator.addEventListener('prepush', function(event) {
-          //console.log("prepush処理が終わりました！", event);
+          console.log("prepush処理が終わりました！", event);
+          console.log(event.currentPage.id);
+          console.log(gparam_id);
           //console.log(event.currentPage);
         });
 
@@ -53,6 +75,15 @@
                 showScore();
                 gf_score= true; // スコア表示済みフラグON   
             }
+        } else if(page.id == "score_detail"){
+            /*
+            alert('score_detail');
+            // 詳細ページ表示
+            showScoreDetail(gparam_id
+                            ,gparam_title
+                            ,gparam_filekey);
+            */
+            
         }
     });
 
